@@ -40,12 +40,30 @@ function runCommand(command, errorMessage, extraEnv = {}) {
   console.log(`\n> Running: ${command}`);
   try {
     execSync(command, {
-      stdio: 'inherit',
+      stdio: ['inherit', 'inherit', 'pipe'],
       env: { ...process.env, ...extraEnv },
     });
   } catch (error) {
+    const capturedStderr = error.stderr?.toString?.() ?? '';
+    if (capturedStderr) process.stderr.write(capturedStderr + '\n');
+    error.capturedStderr = capturedStderr;
     throw new Error(`${errorMessage} (${command})`, { cause: error });
   }
+}
+
+function classifyRegistryError(error) {
+  const cause = error.cause ?? {};
+  const stderr = cause.capturedStderr ?? cause.stderr?.toString?.() ?? '';
+  const msg = error.message ?? '';
+  if (stderr.includes('401') || stderr.includes('Unauthorized') || stderr.includes('expired')
+    || msg.includes('401') || msg.includes('Unauthorized') || msg.includes('expired')) {
+    return 'auth-expired';
+  }
+  if (stderr.includes('404') || stderr.includes('not found') || stderr.includes('NPM package')
+    || msg.includes('404') || msg.includes('not found')) {
+    return 'npm-missing';
+  }
+  return 'unknown';
 }
 
 function parseFlags(args) {
@@ -524,6 +542,8 @@ export async function main(args = process.argv.slice(2)) {
   const skipNpm = flags.has('--skip-npm');
   const skipRegistry = flags.has('--skip-registry');
   const skipSmithery = flags.has('--skip-smithery');
+  const otpFlag = [...flags].find((f) => f.startsWith('--otp='));
+  const otp = otpFlag ? otpFlag.split('=')[1] : undefined;
 
   let fileSnapshots = null;
   let npmPublished = false;
@@ -549,7 +569,8 @@ export async function main(args = process.argv.slice(2)) {
       console.log('\n📦 Phase 1: Publishing to npm... SKIPPED (--skip-npm)');
     } else {
       console.log('\n📦 Phase 1: Publishing to npm...');
-      runCommand('npm publish --access public', 'npm publishing failed.');
+      const npmPublishCmd = otp ? `npm publish --access public --otp=${otp}` : 'npm publish --access public';
+      runCommand(npmPublishCmd, 'npm publishing failed.');
       npmPublished = true;
     }
 
@@ -558,18 +579,46 @@ export async function main(args = process.argv.slice(2)) {
       console.log('\n🌍 Phase 2: Publishing to Official MCP Registry... SKIPPED (--skip-registry)');
     } else {
       console.log('\n🌍 Phase 2: Publishing to Official MCP Registry...');
-      try {
-        runCommand(`${getMcpPublisher()} publish`, 'Official MCP Registry publishing failed.');
-      } catch (error) {
-        const causeStderr = error.cause?.stderr?.toString?.() ?? '';
-        const causeMessage = error.message ?? '';
-        if (causeStderr.includes('401') || causeStderr.includes('Unauthorized') || causeStderr.includes('expired')
-          || causeMessage.includes('401') || causeMessage.includes('Unauthorized') || causeMessage.includes('expired')) {
-          const pub = getMcpPublisher();
-          console.error(`\n💡 Auth token expired. Run: ${pub} login github`);
-          console.error(`   Then retry with: npm run release -- ${versionArg} --skip-npm`);
+      const pub = getMcpPublisher();
+      let attempts = 0;
+      const maxAttempts = 3;
+
+      while (attempts < maxAttempts) {
+        attempts++;
+        try {
+          runCommand(`${pub} publish`, 'Official MCP Registry publishing failed.');
+          break; // success
+        } catch (error) {
+          const classification = classifyRegistryError(error);
+
+          if (classification === 'npm-missing' && !npmPublished) {
+            console.log('\n🔄 Registry needs npm package. Publishing to npm first...');
+            const npmPublishCmd = otp ? `npm publish --access public --otp=${otp}` : 'npm publish --access public';
+            runCommand(npmPublishCmd, 'npm publishing failed.');
+            npmPublished = true;
+            console.log('\n🔄 Retrying registry publish...');
+            continue;
+          }
+
+          if (classification === 'auth-expired') {
+            if (attempts >= maxAttempts) {
+              console.error(`\n❌ Auth still expired after ${maxAttempts} attempts. Giving up.`);
+              throw error;
+            }
+            console.log(`\n🔄 Auth token expired. Re-logging in...`);
+            try {
+              runCommand(`${pub} login github`, 'Registry login failed.');
+            } catch (loginError) {
+              console.error('❌ Automatic login failed. Fix manually:');
+              console.error(`   ${pub} login github`);
+              throw error; // throw original registry error
+            }
+            console.log('🔄 Retrying registry publish...');
+            continue;
+          }
+
+          throw error;
         }
-        throw error;
       }
     }
 
