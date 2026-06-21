@@ -1,7 +1,21 @@
-# smart-terminal-mcp
-[![CI](https://github.com/pungggi/smart-terminal-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/pungggi/smart-terminal-mcp/actions/workflows/ci.yml)
+<div align=center>
+
+<h1><a href="https://github.com/animaios/airi">AnimAIOS</a> - Terminal MCP</h1> 
+
+<img width="256" height="384" alt="AnimAIOS mascot" src="https://github.com/user-attachments/assets/a3c143d3-a476-47d2-bd92-759496bcfb87" />
+<br>
+<a href="https://github.com/animaios/terminal-mcp/actions/workflows/ci.yml">
+  <img src="https://github.com/animaios/terminal-mcp/actions/workflows/ci.yml/badge.svg" alt="CI">
+</a>
+<a href="https://app.deepsource.com/gh/animaios/terminal-mcp/" target="_blank"><img alt="DeepSource" title="DeepSource" src="https://app.deepsource.com/gh/animaios/terminal-mcp.svg/?label=code+coverage&show_trend=true&token=cC7vjtxfUW0PCRlEOB0s3JmL"/></a><a href="https://app.deepsource.com/gh/animaios/terminal-mcp/" target="_blank"><img alt="DeepSource" title="DeepSource" src="https://app.deepsource.com/gh/animaios/terminal-mcp.svg/?label=active+issues&show_trend=true&token=cC7vjtxfUW0PCRlEOB0s3JmL"/></a>
+<a href="https://app.deepsource.com/gh/animaios/terminal-mcp/" target="_blank"><img alt="DeepSource" title="DeepSource" src="https://app.deepsource.com/gh/animaios/terminal-mcp.svg/?label=resolved+issues&show_trend=true&token=cC7vjtxfUW0PCRlEOB0s3JmL"/></a>
+
+<!--
 [![Smithery](https://img.shields.io/badge/Smithery-smart--terminal-blue)](https://smithery.ai/server/pungggi/smart-terminal)
 [![Official Registry](https://img.shields.io/badge/MCP-Official--Registry-green)](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.pungggi/smart-terminal)
+-->
+
+</div>
 
 A PTY-based MCP server with strong Windows support, giving MCP-capable AI clients and their agents persistent, interactive shell access via pseudo-terminals ([node-pty](https://github.com/microsoft/node-pty)).
 
