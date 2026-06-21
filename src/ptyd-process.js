@@ -37,6 +37,7 @@ export class PtydProcess {
       this._process = proc;
 
       let started = false;
+      let stdoutBuf = '';
 
       const timer = setTimeout(() => {
         if (!started) {
@@ -46,12 +47,13 @@ export class PtydProcess {
       }, SOCKET_WAIT_TIMEOUT);
 
       proc.stdout.on('data', (chunk) => {
-        const line = chunk.toString('utf8').trim();
-        const match = line.match(/^SOCKET\s+(.+)$/);
+        stdoutBuf += chunk.toString('utf8');
+
+        const match = stdoutBuf.match(/^SOCKET\s+(.+)$/m);
         if (match && !started) {
           started = true;
           clearTimeout(timer);
-          this._socketPath = match[1];
+          this._socketPath = match[1].trim();
           resolvePromise({ socketPath: this._socketPath, pid: proc.pid });
         }
       });

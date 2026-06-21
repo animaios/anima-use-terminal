@@ -94,6 +94,7 @@ export class PtySession {
   constructor({ id, shell, shellArgs, cols, rows, cwd, name, env: customEnv, ptydClient }) {
     this.id = id;
     this.shell = shell;
+    this.shellArgs = shellArgs || [];
     this.shellType = getShellType(shell);
     this.name = name || null;
     this.cols = cols;
@@ -139,7 +140,7 @@ export class PtySession {
 
     const { sessionId, pid } = await this.ptydClient.start({
       shell: this.shell,
-      args: [],
+      args: this.shellArgs,
       cols: this.cols,
       rows: this.rows,
       cwd: this.cwd,
