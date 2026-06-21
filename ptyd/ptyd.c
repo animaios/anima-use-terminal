@@ -689,6 +689,12 @@ static void reap_children(void) {
 
                 log_msg("Session %u exited (pid %d, code %d)",
                         sessions[i].id, (int)pid, sessions[i].exit_code);
+
+                /* Free the slot so it can be reused */
+                sessions[i].exited = false;
+                sessions[i].id = 0;
+                sessions[i].exit_code = 0;
+                sessions[i].exit_signal = 0;
                 break;
             }
         }
