@@ -1,14 +1,14 @@
 <div align=center>
 
-<h1><a href="https://github.com/animaios/airi">AnimAIOS</a> - Terminal MCP</h1> 
+<h1><a href="https://github.com/animaios/airi">Anima</a>TerminalMCP</h1> 
 
 <img width="256" height="384" alt="AnimAIOS mascot" src="https://github.com/user-attachments/assets/a3c143d3-a476-47d2-bd92-759496bcfb87" />
 <br>
-<a href="https://github.com/animaios/terminal-mcp/actions/workflows/ci.yml">
-  <img src="https://github.com/animaios/terminal-mcp/actions/workflows/ci.yml/badge.svg" alt="CI">
+<a href="https://github.com/animaios/animaterminal-mcp/actions/workflows/ci.yml">
+  <img src="https://github.com/animaios/animaterminal-mcp/actions/workflows/ci.yml/badge.svg" alt="CI">
 </a>
-<a href="https://app.deepsource.com/gh/animaios/terminal-mcp/" target="_blank"><img alt="DeepSource" title="DeepSource" src="https://app.deepsource.com/gh/animaios/terminal-mcp.svg/?label=code+coverage&show_trend=true&token=cC7vjtxfUW0PCRlEOB0s3JmL"/></a><a href="https://app.deepsource.com/gh/animaios/terminal-mcp/" target="_blank"><img alt="DeepSource" title="DeepSource" src="https://app.deepsource.com/gh/animaios/terminal-mcp.svg/?label=active+issues&show_trend=true&token=cC7vjtxfUW0PCRlEOB0s3JmL"/></a>
-<a href="https://app.deepsource.com/gh/animaios/terminal-mcp/" target="_blank"><img alt="DeepSource" title="DeepSource" src="https://app.deepsource.com/gh/animaios/terminal-mcp.svg/?label=resolved+issues&show_trend=true&token=cC7vjtxfUW0PCRlEOB0s3JmL"/></a>
+<a href="https://app.deepsource.com/gh/animaios/animaterminal-mcp/" target="_blank"><img alt="DeepSource" title="DeepSource" src="https://app.deepsource.com/gh/animaios/animaterminal-mcp.svg/?label=code+coverage&show_trend=true&token=cC7vjtxfUW0PCRlEOB0s3JmL"/></a><a href="https://app.deepsource.com/gh/animaios/animaterminal-mcp/" target="_blank"><img alt="DeepSource" title="DeepSource" src="https://app.deepsource.com/gh/animaios/animaterminal-mcp.svg/?label=active+issues&show_trend=true&token=cC7vjtxfUW0PCRlEOB0s3JmL"/></a>
+<a href="https://app.deepsource.com/gh/animaios/animaterminal-mcp/" target="_blank"><img alt="DeepSource" title="DeepSource" src="https://app.deepsource.com/gh/animaios/animaterminal-mcp.svg/?label=resolved+issues&show_trend=true&token=cC7vjtxfUW0PCRlEOB0s3JmL"/></a>
 
 <!--
 [![Smithery](https://img.shields.io/badge/Smithery-smart--terminal-blue)](https://smithery.ai/server/pungggi/smart-terminal)
@@ -119,7 +119,7 @@ Use `SMART_TERMINAL_DISABLED_TOOLS` to customize which tools are extra, or set i
   "mcpServers": {
     "smart-terminal": {
       "command": "npx",
-      "args": ["-y", "smart-terminal-mcp@stable"],
+      "args": ["-y", "smart-animaterminal-mcp@stable"],
       "env": { "SMART_TERMINAL_DISABLED_TOOLS": "" }
     }
   }
@@ -151,20 +151,20 @@ Use `SMART_TERMINAL_DISABLED_TOOLS` to customize which tools are extra, or set i
 Recommended: run the stable release directly via `npx`:
 
 ```bash
-npx smart-terminal-mcp@stable
+npx smart-animaterminal-mcp@stable
 ```
 
 Or install globally:
 
 ```bash
-npm install -g smart-terminal-mcp
+npm install -g smart-animaterminal-mcp
 ```
 
 Or clone for development:
 
 ```bash
 git clone <repo-url>
-cd smart-terminal-mcp
+cd smart-animaterminal-mcp
 npm install
 ```
 
@@ -179,7 +179,7 @@ Add to your `claude_desktop_config.json`:
   "mcpServers": {
     "smart-terminal": {
       "command": "npx",
-      "args": ["-y", "smart-terminal-mcp@stable"]
+      "args": ["-y", "smart-animaterminal-mcp@stable"]
     }
   }
 }
@@ -188,7 +188,7 @@ Add to your `claude_desktop_config.json`:
 ### Claude Code
 
 ```bash
-claude mcp add smart-terminal -- npx -y smart-terminal-mcp@stable
+claude mcp add smart-terminal -- npx -y smart-animaterminal-mcp@stable
 ```
 
 ### Augment Code
@@ -201,7 +201,7 @@ Add to your Augment MCP settings:
     "Smart Terminal": {
       "command": "npx",
       "args": [
-        "smart-terminal-mcp@stable"
+        "smart-animaterminal-mcp@stable"
       ]
     }
   }
